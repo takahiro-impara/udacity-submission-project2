@@ -1,8 +1,11 @@
 import express from 'express';
+import { Request, Response } from 'express';
+
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
-import { filter } from 'bluebird';
+import { IndexRouter } from './controllers/v0/index.router';
 
+const session = require('express-session');
 (async () => {
 
   // Init the Express application
@@ -34,18 +37,20 @@ import { filter } from 'bluebird';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async ( req: Request, res: Response ) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
-  app.get( "/filteredimage/", async ( req, res ) => {
+  app.get( "/filteredimage/", async ( req: Request, res: Response ) => {
     let { image_url } = req.query;
     if (!image_url) {
       res.status(400).send("Could not filter image");
     }
-    const filterdurl = await filterImageFromURL(image_url);
+    const filterdurl:string = await filterImageFromURL(image_url);
     res.status(200).sendFile(filterdurl, () => deleteLocalFiles([filterdurl]));
   } );
+
+  app.use('/api/v0/', IndexRouter);
 
   // Start the Server
   app.listen( port, () => {
