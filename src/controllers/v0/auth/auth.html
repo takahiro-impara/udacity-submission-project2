@@ -2,5 +2,19 @@
   <header></header>
   <body>
     <h1>This is Auth Page</h1>
+    <form action="/api/v0/auth/login" method="post">
+      <div>
+          <label>ユーザーID：</label>
+          <input type="text" name="username"/>
+      </div>
+      <div>
+          <label>パスワード：</label>
+          <input type="password" name="password"/>
+      </div>
+      <div>
+          <input type="submit" value="ログイン"/>
+      </div>
+    </form>
+
   </body>
 </html>
